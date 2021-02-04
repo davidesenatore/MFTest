@@ -12,7 +12,7 @@ Run `npm start` to start both shell (port 5000) and mfe1 (port 3000)
 
 ## Problems
 
-This project have been created to explore a bug with Angular injector. If TestComponent, inside mfe1 remote, is loaded with constructor signature with HttpClient reference, the module loading fail with this error:
+This project originally have been created to explore a bug with Angular injector. If TestComponent, inside mfe1 remote, is loaded with constructor signature with HttpClient reference, the module loading fail with this error:
 
 ERROR Error: Uncaught (in promise): NullInjectorError: R3InjectorError(AppModule)[HttpClient -> HttpClient -> HttpClient]: 
   NullInjectorError: No provider for HttpClient!
@@ -42,6 +42,20 @@ export class TestComponent implements OnInit {
   }
 
 }
+
+## Solution
+
+The solution was simple.  I did not understand that the "shared" part of webpack.config.js means "sharing namespaces" and not "packages".
+The problem is solved adding a row to both webpack.config.js, as it follows:
+
+shared: {
+"@angular/core": { singleton: true, strictVersion: true },
+"@angular/common": { singleton: true, strictVersion: true },
+"@angular/common/http": { singleton: true, strictVersion: true }, <====this was the missing line!
+"@angular/router": { singleton: true, strictVersion: true },
+}
+
+Now it works perfectly!
 
 ## Credits
 
