@@ -1,27 +1,54 @@
 # MFTest
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.0.8.
-
-## Development server
-
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+This project is a test of WebPack 5 Module Federation with Angular 11
 
 ## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+Run `npm run build` to build both shell and mfe1 remote
 
-## Running unit tests
+## Start
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Run `npm start` to start both shell (port 5000) and mfe1 (port 3000)
 
-## Running end-to-end tests
+## Problems
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+This project have been created to explore a bug with Angular injector. If TestComponent, inside mfe1 remote, is loaded with constructor signature with HttpClient reference, the module loading fail with this error:
 
-## Further help
+ERROR Error: Uncaught (in promise): NullInjectorError: R3InjectorError(AppModule)[HttpClient -> HttpClient -> HttpClient]: 
+  NullInjectorError: No provider for HttpClient!
+NullInjectorError: R3InjectorError(AppModule)[HttpClient -> HttpClient -> HttpClient]: 
+  NullInjectorError: No provider for HttpClient!
+  ...
+  at NodeInjectorFactory.TestComponent_Factory [as factory] (test.component.ts:8)
+  ...
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+To see the error, comment empty constructor and uncomment contructor with HttpClient in file test.component.ts
+
+import {  Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
+@Component({
+  selector: 'app-test',
+  templateUrl: './test.component.html',
+  styleUrls: ['./test.component.css']
+})
+export class TestComponent implements OnInit {
+
+  //constructor(http:HttpClient) { }
+  
+  constructor() { }   //comment this line and uncomment the line above to see the error
+
+  ngOnInit(): void {
+  }
+
+}
+
+## Credits
+
+This project is based on Webpack 5 module federation and AngularArchitect.
+Many Thanks to Manfred Steyer (https://www.angulararchitects.io) for his brilliant blog post on Angular and module federation
+
+## References
+
+https://www.angulararchitects.io/aktuelles/the-microfrontend-revolution-module-federation-in-webpack-5/
+https://www.npmjs.com/package/@angular-architects/module-federation/v/1.2.3
