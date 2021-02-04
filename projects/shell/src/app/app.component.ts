@@ -57,7 +57,7 @@ export class AppComponent implements OnInit {
     //Create component factory
     const factory2 = this.cfr.resolveComponentFactory(component2);
     //Crete component dynamically and host it in the placeholder
-    this.viewContainer.createComponent(factory2);
+    this.viewContainer.createComponent(factory2, null, this.injector);
   }
 
 }

@@ -8,9 +8,9 @@ import { HttpClient } from '@angular/common/http';
 })
 export class TestComponent implements OnInit {
 
-  //constructor(http:HttpClient) { }
+  constructor(http:HttpClient) { }
   
-  constructor() { }   //comment this line and uncomment the line above to see the error
+  //constructor() { }   //comment this line and uncomment the line above to see the error
 
   ngOnInit(): void {
   }
